@@ -1,0 +1,59 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+   Design tokens. Everything visual on the site resolves back to this block,
+   so restyling the whole site means editing these values and nothing else.
+   --------------------------------------------------------------------------- */
+@theme {
+  /* Surfaces */
+  --color-parchment: #faf8f4;
+  --color-parchment-deep: #f2eee6;
+  --color-surface: #ffffff;
+
+  /* Text */
+  --color-ink: #1c1a17;
+  --color-ink-soft: #55504a;
+  --color-ink-faint: #8a837a;
+
+  /* Accent — a muted academic blue, used sparingly */
+  --color-accent: #3a5a7a;
+  --color-accent-soft: #6b8bab;
+
+  /* Lines */
+  --color-rule: #e2dcd1;
+
+  /* Type */
+  --font-serif: "Lora", Georgia, "Times New Roman", serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+
+  /* Rhythm */
+  --spacing-measure: 68ch;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-parchment);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Long-form prose blocks (bio, tributes, work abstracts) */
+.prose-memorial {
+  max-width: var(--spacing-measure);
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  color: var(--color-ink-soft);
+}
+.prose-memorial p + p {
+  margin-top: 1.25em;
+}
+.prose-memorial a {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}

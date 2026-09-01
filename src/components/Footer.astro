@@ -1,0 +1,29 @@
+---
+import { site } from "../config";
+---
+
+<footer class="mt-24 border-t border-rule">
+  <div
+    class="mx-auto max-w-5xl px-6 py-10 text-sm text-ink-faint sm:flex sm:items-center sm:justify-between"
+  >
+    <p class="font-serif italic">
+      {site.name} · {site.born}–{site.died}
+    </p>
+    <p class="mt-3 sm:mt-0">
+      {site.maintainer}
+      {
+        site.contact && (
+          <>
+            {" "}
+            <a
+              href={`mailto:${site.contact}`}
+              class="underline hover:text-accent"
+            >
+              Get in touch
+            </a>
+          </>
+        )
+      }
+    </p>
+  </div>
+</footer>

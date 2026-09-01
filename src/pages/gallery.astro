@@ -1,0 +1,68 @@
+---
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+import Layout from "../layouts/Layout.astro";
+import PageHeader from "../components/PageHeader.astro";
+import captions from "../data/captions.json";
+
+// Any image dropped into src/assets/gallery/ appears here automatically.
+// Astro optimizes and resizes each one at build time.
+const files = import.meta.glob<{ default: ImageMetadata }>(
+  "../assets/gallery/*.{jpg,jpeg,png,webp,avif}",
+  { eager: true },
+);
+
+const captionFor = captions as Record<string, string>;
+
+const photos = Object.entries(files)
+  .map(([path, mod]) => {
+    const filename = path.split("/").pop()!;
+    return { filename, image: mod.default, caption: captionFor[filename] };
+  })
+  .sort((a, b) => a.filename.localeCompare(b.filename));
+---
+
+<Layout title="Gallery" description="Photographs from her life and career.">
+  <PageHeader
+    title="Gallery"
+    lede="Photographs from her life, her teaching, and the people she worked among."
+  />
+
+  <div class="mx-auto max-w-5xl px-6">
+    {
+      photos.length === 0 ? (
+        <div class="rounded-sm border border-dashed border-rule bg-parchment-deep p-8 text-sm text-ink-soft">
+          <p class="font-serif text-base text-ink">No photographs yet.</p>
+          <p class="mt-3">
+            Drop image files into{" "}
+            <code class="text-ink">src/assets/gallery/</code> and they will
+            appear here, optimized automatically. To caption one, add an entry
+            keyed by filename in{" "}
+            <code class="text-ink">src/data/captions.json</code>.
+          </p>
+        </div>
+      ) : (
+        <ul class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          {photos.map(({ filename, image, caption }) => (
+            <li>
+              <figure>
+                <Image
+                  src={image}
+                  alt={caption ?? `Photograph: ${filename}`}
+                  widths={[400, 800]}
+                  sizes="(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 90vw"
+                  class="w-full rounded-sm border border-rule bg-surface"
+                />
+                {caption && (
+                  <figcaption class="mt-3 text-sm text-ink-faint">
+                    {caption}
+                  </figcaption>
+                )}
+              </figure>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+  </div>
+</Layout>
