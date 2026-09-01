@@ -2,28 +2,11 @@
 import { site } from "../config";
 ---
 
-<footer class="mt-24 border-t border-rule">
+<footer class="mt-auto border-t border-line bg-paper">
   <div
-    class="mx-auto max-w-5xl px-6 py-10 text-sm text-ink-faint sm:flex sm:items-center sm:justify-between"
+    class="mx-auto flex max-w-[1180px] flex-wrap items-baseline justify-between gap-4 px-[clamp(20px,4vw,40px)] py-9"
   >
-    <p class="font-serif italic">
-      {site.name} · {site.born}–{site.died}
-    </p>
-    <p class="mt-3 sm:mt-0">
-      {site.maintainer}
-      {
-        site.contact && (
-          <>
-            {" "}
-            <a
-              href={`mailto:${site.contact}`}
-              class="underline hover:text-accent"
-            >
-              Get in touch
-            </a>
-          </>
-        )
-      }
-    </p>
+    <p class="font-serif text-[18px] text-ink">{site.shortName}</p>
+    <p class="text-[13px] text-muted">{site.footerLine}</p>
   </div>
 </footer>

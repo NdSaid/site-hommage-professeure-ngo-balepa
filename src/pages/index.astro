@@ -1,112 +1,103 @@
 ---
-import { Image } from "astro:assets";
-import type { ImageMetadata } from "astro";
 import Layout from "../layouts/Layout.astro";
-import { site } from "../config";
+import Frame from "../components/Frame.astro";
 
-// Optional portrait: drop a file at src/assets/portrait.jpg (or .png/.webp).
-// Using a glob rather than a direct import means the build still succeeds
-// while no photograph has been added yet.
-const found = import.meta.glob<{ default: ImageMetadata }>(
-  "../assets/portrait.{jpg,jpeg,png,webp}",
-  { eager: true },
-);
-const portrait = Object.values(found)[0]?.default;
+const themes = [
+  {
+    title: "Douala",
+    text: "Son université, son terrain, sa ville d'enseignement.",
+  },
+  {
+    title: "Industrialisation",
+    text: "Les effets de l'industrie sur les territoires camerounais.",
+  },
+  {
+    title: "Développement",
+    text: "Le développement lu à l'échelle des lieux et des populations.",
+  },
+];
 ---
 
 <Layout>
   <!-- Hero -->
-  <section class="mx-auto max-w-5xl px-6 pt-16 pb-4 sm:pt-28">
-    <div class="flex flex-col gap-12 sm:flex-row sm:items-start">
-      {
-        portrait ? (
-          <Image
-            src={portrait}
-            alt={`Portrait of ${site.name}`}
-            width={280}
-            densities={[1, 2]}
-            class="w-48 shrink-0 rounded-sm border border-rule shadow-sm sm:w-64"
-          />
-        ) : (
-          <div
-            class="flex aspect-[4/5] w-48 shrink-0 items-center justify-center rounded-sm border border-dashed border-rule bg-parchment-deep p-4 text-center text-xs text-ink-faint sm:w-64"
-            aria-hidden="true"
-          >
-            Add a portrait at
-            <br />
-            src/assets/portrait.jpg
-          </div>
-        )
-      }
+  <section
+    class="mx-auto grid max-w-[1180px] items-end gap-[clamp(36px,5vw,72px)] px-[clamp(20px,4vw,40px)] pt-[clamp(56px,8vw,104px)] pb-[clamp(48px,6vw,80px)]"
+    style="grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));"
+  >
+    <div>
+      <p class="eyebrow">In memoriam</p>
+      <h1 class="mb-7 text-[clamp(40px,6.4vw,72px)]" style="max-width: 12ch;">
+        Professeure Aurore Sara Ngo Balepa
+      </h1>
 
-      <div class="pt-2">
-        <h1 class="font-serif text-4xl leading-tight text-ink sm:text-6xl">
-          {site.name}
-        </h1>
-        <p class="mt-4 font-serif text-xl text-ink-soft italic">
-          {site.born} – {site.died}
-        </p>
-        <p class="mt-6 max-w-md text-ink-soft">{site.honorific}</p>
-        <div class="mt-8 h-px w-24 bg-accent-soft"></div>
+      <p class="lede text-[clamp(17px,1.8vw,20px)]" style="max-width: 48ch;">
+        Géographe, enseignante-chercheure au Département de Géographie de
+        l'Université de Douala. Cheffe de département, puis Vice-Doyenne de la
+        Faculté des Lettres et Sciences Humaines.
+      </p>
+      <p class="mt-3 text-[15px] text-muted italic" style="max-width: 48ch;">
+        Geographer and researcher at the University of Douala. Head of the
+        Geography Department, later Vice-Dean of the Faculty of Arts and
+        Humanities.
+      </p>
+
+      <div class="mt-[34px] flex flex-wrap gap-2.5">
+        <a href="/biographie/" class="btn btn-primary no-underline"
+          >Découvrir son parcours</a
+        >
+        <a href="/livre-d-or/" class="btn btn-secondary no-underline"
+          >Laisser un message</a
+        >
       </div>
+    </div>
+
+    <Frame
+      name="portrait"
+      ratio="4/5"
+      alt="Portrait de la Professeure Aurore Sara Ngo Balepa"
+      caption="Portrait — légende et date à préciser"
+    />
+  </section>
+
+  <!-- Bandeau thèmes -->
+  <section class="border-y border-line bg-paper">
+    <div
+      class="mx-auto grid max-w-[1180px] gap-10 px-[clamp(20px,4vw,40px)] py-[clamp(40px,5vw,64px)]"
+      style="grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));"
+    >
+      {
+        themes.map(({ title, text }) => (
+          <div>
+            <h2 class="font-serif text-[26px]">{title}</h2>
+            <p class="mt-3 mb-0 text-[15px] text-muted">{text}</p>
+          </div>
+        ))
+      }
     </div>
   </section>
 
-  <!-- Remembrance -->
-  <section class="mx-auto max-w-5xl px-6 pt-16">
-    <h2 class="font-serif text-2xl text-ink">In Memoriam</h2>
-
-    <div class="prose-memorial mt-6">
-      <p>
-        Write her remembrance here. This is the heart of the site — the piece
-        that tells a visitor who she was, not just what she accomplished. Two or
-        three paragraphs is usually right.
+  <!-- Un enseignement, une école -->
+  <section
+    class="mx-auto grid max-w-[1180px] items-center gap-[clamp(36px,5vw,72px)] px-[clamp(20px,4vw,40px)] py-[clamp(56px,7vw,96px)]"
+    style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));"
+  >
+    <div>
+      <h2 class="h2" style="max-width: 14ch;">Un enseignement, une école</h2>
+      <p class="mt-6 text-muted" style="max-width: 40ch;">
+        Des promotions d'étudiants formées à la géographie à Douala. Ce site
+        rassemble ses travaux, sa carrière et les hommages de celles et ceux qui
+        l'ont connue.
       </p>
-      <p>
-        Consider covering: where she came from and what drew her to her field;
-        the question or idea that occupied her; what she was like to be taught
-        by, or to work alongside; and what she left behind in the people she
-        trained.
-      </p>
-      <p>
-        Edit this text in <code>src/pages/index.astro</code>.
-      </p>
+      <a href="/travaux/" class="link-underline no-underline"
+        >Voir les travaux</a
+      >
     </div>
 
-    <!-- Onward links -->
-    <nav
-      aria-label="Explore"
-      class="mt-16 grid gap-px overflow-hidden rounded-sm border border-rule bg-rule sm:grid-cols-3"
-    >
-      {
-        [
-          {
-            href: "/career/",
-            title: "Education & Career",
-            blurb: "Her degrees, appointments, and honors.",
-          },
-          {
-            href: "/work/",
-            title: "Her Work",
-            blurb: "Publications, books, and talks.",
-          },
-          {
-            href: "/tributes/",
-            title: "Tributes",
-            blurb: "Remembrances from those who knew her.",
-          },
-        ].map(({ href, title, blurb }) => (
-          <a
-            href={href}
-            class="group bg-surface p-6 transition-colors hover:bg-parchment-deep"
-          >
-            <h3 class="font-serif text-lg text-ink group-hover:text-accent">
-              {title}
-            </h3>
-            <p class="mt-2 text-sm text-ink-soft">{blurb}</p>
-          </a>
-        ))
-      }
-    </nav>
+    <Frame
+      name="enseignement"
+      ratio="16/10"
+      alt="Photographie d'enseignement"
+      caption="Photographie — légende à préciser"
+    />
   </section>
 </Layout>

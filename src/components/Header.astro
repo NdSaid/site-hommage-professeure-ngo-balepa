@@ -6,19 +6,20 @@ const isActive = (href: string) =>
   href === "/" ? path === "/" : path.startsWith(href);
 ---
 
-<header class="border-b border-rule bg-parchment/90 backdrop-blur">
+<header
+  class="sticky top-0 z-20 border-b border-line"
+  style="background: color-mix(in srgb, #f7f5f0 94%, transparent); backdrop-filter: blur(8px);"
+>
   <div
-    class="mx-auto flex max-w-5xl flex-col gap-4 px-6 py-5 sm:flex-row sm:items-baseline sm:justify-between"
+    class="mx-auto flex max-w-[1180px] flex-wrap items-baseline gap-x-7 gap-y-3 px-[clamp(20px,4vw,40px)] py-4"
   >
-    <a
-      href="/"
-      class="font-serif text-lg tracking-wide text-ink transition-colors hover:text-accent"
-    >
-      {site.name}
+    <a href="/" class="mr-auto no-underline">
+      <span class="block font-serif text-[19px] text-ink">{site.name}</span>
+      <span class="label mt-0.5 block text-muted">{site.affiliation}</span>
     </a>
 
-    <nav aria-label="Primary">
-      <ul class="flex flex-wrap gap-x-6 gap-y-2 text-sm">
+    <nav aria-label="Navigation principale">
+      <ul class="flex flex-wrap items-baseline">
         {
           nav.map(({ href, label }) => (
             <li>
@@ -26,10 +27,8 @@ const isActive = (href: string) =>
                 href={href}
                 aria-current={isActive(href) ? "page" : undefined}
                 class:list={[
-                  "transition-colors hover:text-accent",
-                  isActive(href)
-                    ? "text-ink underline decoration-accent decoration-2 underline-offset-8"
-                    : "text-ink-soft",
+                  "block px-3 py-[7px] text-[14px] no-underline transition-colors duration-[120ms] hover:bg-paper",
+                  isActive(href) ? "text-green" : "text-muted hover:text-muted",
                 ]}
               >
                 {label}

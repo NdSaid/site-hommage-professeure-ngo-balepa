@@ -1,27 +1,33 @@
 /**
- * Site-wide details. Edit this file first — her name, dates, and the nav
- * labels flow from here into every page, the <title> tags, and the footer.
+ * Détails du site. Source unique pour le nom, les titres et la navigation.
  */
 export const site = {
-  name: "Professor Jane Doe",
-  /** Shown under her name on the homepage. */
-  honorific: "Professor of ___, University of ___",
-  born: "1952",
-  died: "2025",
-  /** One line, used as the page description and in search results. */
-  tagline:
-    "A scholar, teacher, and mentor — a record of her life and her work.",
-  /** Optional: drop a portrait at src/assets/portrait.jpg to enable it. */
-  portrait: "portrait.jpg",
-  /** Shown in the footer. */
-  maintainer: "Maintained by her family, colleagues, and students.",
-  contact: "",
+  name: "Aurore Sara Ngo Balepa",
+  fullName: "Professeure Aurore Sara Ngo Balepa",
+  shortName: "Pr. Aurore Sara Ngo Balepa",
+  affiliation: "Université de Douala · Géographie",
+  footerLine:
+    "Site d'hommage · Université de Douala, Département de Géographie",
+  description:
+    "Site d'hommage à la Professeure Aurore Sara Ngo Balepa, géographe, " +
+    "enseignante-chercheure au Département de Géographie de l'Université de Douala.",
+
+  /**
+   * Endpoint de réception du livre d'or (Formspree, Netlify Forms, Web3Forms…).
+   * Laisser vide tant qu'aucun service n'est configuré : le formulaire
+   * affiche alors une adresse de contact à la place.
+   * Voir la section « Livre d'or » du README.
+   */
+  guestbookEndpoint: "",
+  /** Adresse de repli utilisée si guestbookEndpoint est vide. */
+  contactEmail: "",
 } as const;
 
 export const nav = [
-  { href: "/", label: "In Memoriam" },
-  { href: "/career/", label: "Education & Career" },
-  { href: "/work/", label: "Her Work" },
-  { href: "/gallery/", label: "Gallery" },
-  { href: "/tributes/", label: "Tributes" },
+  { href: "/", label: "Accueil" },
+  { href: "/biographie/", label: "Biographie" },
+  { href: "/travaux/", label: "Travaux" },
+  { href: "/carriere/", label: "Carrière" },
+  { href: "/galerie/", label: "Galerie" },
+  { href: "/livre-d-or/", label: "Livre d'or" },
 ] as const;

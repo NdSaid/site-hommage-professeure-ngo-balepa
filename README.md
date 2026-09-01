@@ -1,88 +1,118 @@
-# Memorial Site
+# Site d'hommage — Pr. Aurore Sara Ngo Balepa
 
-A memorial website for a university professor — her life, her education and
-career, and above all a lasting, findable archive of her work.
+Site mémoriel bilingue (français principal, anglais secondaire) rendant hommage
+à la Professeure Aurore Sara Ngo Balepa, enseignante-chercheure au Département
+de Géographie de l'Université de Douala, cheffe de département puis Vice-Doyenne
+de la Faculté des Lettres et Sciences Humaines (FLSH).
 
-Built with [Astro](https://astro.build) and Tailwind CSS. The site is fully
-static: it compiles to plain HTML and can be hosted anywhere, free, with
-nothing to maintain and no database to keep running.
+Six vues : Accueil, Biographie, Travaux, Carrière, Galerie, Livre d'or.
 
-## Getting started
+Réalisé avec [Astro](https://astro.build) et Tailwind CSS, d'après le handoff
+de design `Site hommage professeur géographie`. Le site est entièrement
+statique : il se compile en HTML et s'héberge partout, gratuitement.
+
+## Démarrer
 
 ```bash
 npm install
 npm run dev      # http://localhost:4321
 ```
 
-| Command           | What it does                       |
-| ----------------- | ---------------------------------- |
-| `npm run dev`     | Dev server with live reload        |
-| `npm run build`   | Build the static site into `dist/` |
-| `npm run preview` | Serve the built site locally       |
-| `npm run lint`    | ESLint                             |
-| `npm run format`  | Prettier, writes in place          |
+| Commande          | Effet                                 |
+| ----------------- | ------------------------------------- |
+| `npm run dev`     | Serveur de développement              |
+| `npm run build`   | Compile le site statique dans `dist/` |
+| `npm run preview` | Sert le site compilé localement       |
+| `npm run lint`    | ESLint                                |
+| `npm run format`  | Prettier                              |
 
-## Adding content
+## Ce qui reste à compléter
 
-Nearly everything is edited as plain text — no code changes needed.
+Le handoff signale explicitement les contenus en attente de la famille :
 
-**Her name, dates, and title** — `src/config.ts`. Edit this first; the values
-flow into every page, the browser tab titles, and the footer.
+- **Dates de naissance et de décès** → `src/pages/biographie.astro`
+- **Formation et distinctions** → `src/pages/biographie.astro`, `src/data/carriere.ts`
+- **Années de carrière** (« Année » est un emplacement) → `src/data/carriere.ts`
+- **Bibliographie exacte** → `src/content/travaux/`
+- **Photographies** — onze emplacements, voir ci-dessous
+- **Données et cartes de recherche** → `src/assets/photos/cartes.jpg`
 
-**The remembrance on the homepage** — `src/pages/index.astro`, under the
-"In Memoriam" heading.
+## Ajouter du contenu
 
-**Education, appointments, honors** — `src/data/career.ts`. Three lists;
-add or remove entries freely.
+**Nom, affiliation, navigation** → `src/config.ts`.
 
-**Her work** — add one Markdown file per item to `src/content/works/`:
-
-```markdown
----
-title: "The Title, Exactly as Published"
-year: 1998
-venue: "Journal of ___, vol. 12, no. 3, pp. 145–172"
-authors: ["J. Doe", "A. Colleague"]
-type: "article" # article | book | chapter | talk | thesis | other
-doi: "10.1000/example"
-url: "https://example.org/paper"
-pdf: "/papers/1998-title.pdf"
-featured: false
----
-
-Optional abstract or note. Appears on the entry's own page.
-```
-
-Every field except `title` and `year` is optional. Entries group by year
-automatically and each gets its own page. To host a PDF, drop it in
-`public/papers/` and point `pdf:` at it.
-
-**Photographs** — drop image files into `src/assets/gallery/`. They appear on
-the gallery page automatically, resized and optimized at build time. To caption
-one, add an entry keyed by filename in `src/data/captions.json`.
-
-**Her portrait** — save it as `src/assets/portrait.jpg` (`.png` and `.webp`
-also work). The homepage picks it up on its own.
-
-**Tributes** — add one Markdown file per tribute to `src/content/tributes/`:
+**Travaux** — une fiche par fichier Markdown dans `src/content/travaux/` :
 
 ```markdown
 ---
-author: "A. Student"
-relation: "Doctoral student, 2009–2014"
-date: 2025-06-14
+theme: "Industrialisation"
+title: "Titre exact de la publication"
+reference: "Revue, éditeur, année."
+order: 1
+accent: "green" # ou "ochre" pour les directions de thèse
+url: "https://…"
 ---
 
-The tribute itself.
+Résumé en deux ou trois lignes.
 ```
 
-## Changing the design
+**Carrière** → `src/data/carriere.ts`, une entrée par étape.
 
-All colors, fonts, and spacing are defined as tokens at the top of
-`src/styles/global.css`. Editing that one block restyles the entire site.
+**Photographies** — déposer les fichiers dans `src/assets/photos/`, nommés
+exactement ainsi (`.jpg`, `.png` ou `.webp`) :
 
-## Deploying
+| Fichier        | Ratio | Emplacement          |
+| -------------- | ----- | -------------------- |
+| `portrait`     | 4/5   | Hero de l'accueil    |
+| `enseignement` | 16/10 | Accueil, bas de page |
+| `biographie-1` | 3/4   | Biographie           |
+| `biographie-2` | 4/3   | Biographie           |
+| `cartes`       | 16/10 | Travaux              |
 
-`npm run build` produces a `dist/` folder of static files. Any host will serve
-it — Netlify, Vercel, Cloudflare Pages, and GitHub Pages all have free tiers
-suitable for a site like this.
+**Galerie** — déposer les images dans `src/assets/galerie/` (six vignettes 3/4
+dans la maquette ; le nombre est libre). Les légendes se renseignent dans
+`src/data/captions.json`, indexées par nom de fichier. Une lightbox s'ouvre au
+clic. Tant qu'aucune image n'est fournie, des cadres vides tiennent la grille.
+
+## Livre d'or
+
+Le handoff demande une **modération avant publication** — c'est un site
+mémoriel public. L'architecture retenue le respecte :
+
+1. Le formulaire envoie les messages à un service externe
+   (`guestbookEndpoint` dans `src/config.ts` — Formspree, Netlify Forms,
+   Web3Forms…). Tant que ce champ est vide, le formulaire est remplacé par une
+   invitation à écrire par courriel.
+2. Les messages reçus sont relus, puis publiés en ajoutant un fichier Markdown
+   dans `src/content/messages/` :
+
+```markdown
+---
+nom: "Nom et prénom"
+lien: "Ancien étudiant"
+date: 2026-09-01
+---
+
+Le message.
+```
+
+Un champ-piège masqué (`site-web`) filtre les robots. Supprimer
+`src/content/messages/exemple.md` avant la mise en ligne.
+
+## Design
+
+Tous les jetons — couleurs, polices, échelles — sont définis dans le bloc
+`@theme` en tête de `src/styles/global.css`. Points fixés par le handoff, à ne
+pas modifier sans raison :
+
+- **Aucun `border-radius`, aucune ombre portée.** Angles droits partout ; la
+  hiérarchie passe par les filets 1px et les fonds.
+- Les deux accents (vert, ocre) partagent lightness et chroma et ne diffèrent
+  que par la teinte — conserver ce rapport si la palette évolue.
+- Le responsive repose sur `clamp()` et `repeat(auto-fit, minmax(…))`, sans
+  media query.
+
+## Mettre en ligne
+
+`npm run build` produit un dossier `dist/` de fichiers statiques. Netlify,
+Vercel, Cloudflare Pages et GitHub Pages l'hébergent gratuitement.

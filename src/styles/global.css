@@ -1,59 +1,166 @@
 @import "tailwindcss";
 
 /* ---------------------------------------------------------------------------
-   Design tokens. Everything visual on the site resolves back to this block,
-   so restyling the whole site means editing these values and nothing else.
+   Design tokens — from the design handoff (hifi, definitive).
+   The two accents deliberately share lightness and chroma and differ only in
+   hue; keep that relationship if the palette ever changes.
    --------------------------------------------------------------------------- */
 @theme {
-  /* Surfaces */
-  --color-parchment: #faf8f4;
-  --color-parchment-deep: #f2eee6;
-  --color-surface: #ffffff;
+  --color-canvas: #f7f5f0;
+  --color-paper: #efece4;
+  --color-ink: #1b1f1d;
+  --color-muted: #5c5f59;
+  --color-line: #d9d5cb;
+  --color-green: oklch(0.42 0.055 155);
+  --color-ochre: oklch(0.42 0.055 55);
+  --color-green-soft: oklch(0.93 0.02 155);
 
-  /* Text */
-  --color-ink: #1c1a17;
-  --color-ink-soft: #55504a;
-  --color-ink-faint: #8a837a;
+  --font-serif: "Newsreader", Georgia, serif;
+  --font-sans: "Public Sans", system-ui, sans-serif;
 
-  /* Accent — a muted academic blue, used sparingly */
-  --color-accent: #3a5a7a;
-  --color-accent-soft: #6b8bab;
-
-  /* Lines */
-  --color-rule: #e2dcd1;
-
-  /* Type */
-  --font-serif: "Lora", Georgia, "Times New Roman", serif;
-  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
-
-  /* Rhythm */
-  --spacing-measure: 68ch;
+  /* No radii and no shadows anywhere. Hierarchy comes from 1px rules and
+     background shifts. This is deliberate — do not add border-radius. */
+  --radius-none: 0px;
 }
 
-html {
-  scroll-behavior: smooth;
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
 body {
-  background-color: var(--color-parchment);
+  background: var(--color-canvas);
   color: var(--color-ink);
   font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
 }
 
-/* Long-form prose blocks (bio, tributes, work abstracts) */
-.prose-memorial {
-  max-width: var(--spacing-measure);
-  font-size: 1.0625rem;
-  line-height: 1.75;
-  color: var(--color-ink-soft);
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  line-height: 1.14;
+  margin: 0;
 }
-.prose-memorial p + p {
-  margin-top: 1.25em;
-}
-.prose-memorial a {
-  color: var(--color-accent);
-  text-decoration: underline;
+
+a {
+  color: var(--color-green);
   text-underline-offset: 3px;
+}
+a:hover {
+  color: var(--color-ochre);
+}
+
+:focus {
+  outline: none;
+}
+:focus-visible {
+  outline: 2px solid var(--color-green);
+  outline-offset: 3px;
+}
+::selection {
+  background: var(--color-green-soft);
+}
+
+/* --- Repeated design-system pieces ---------------------------------------- */
+
+/* Page shell shared by every content view. */
+.shell {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 clamp(20px, 4vw, 40px);
+}
+.view {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: clamp(48px, 7vw, 88px) clamp(20px, 4vw, 40px) 96px;
+}
+
+/* Over-title above each H1: small, tracked, uppercase, ochre. */
+.eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-ochre);
+  margin-bottom: 18px;
+}
+
+.h1 {
+  font-size: clamp(34px, 5vw, 54px);
+}
+.h2 {
+  font-size: clamp(28px, 3.6vw, 38px);
+}
+
+/* Buttons — square corners, 1px borders, 120ms colour transition. */
+.btn {
+  display: inline-block;
+  font-size: 15px;
+  padding: 12px 24px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease,
+    color 120ms ease;
+}
+.btn-primary {
+  background: var(--color-green);
+  border-color: var(--color-green);
+  color: var(--color-canvas);
+}
+.btn-primary:hover {
+  background: #1b1f1d;
+  border-color: #1b1f1d;
+  color: var(--color-canvas);
+}
+.btn-secondary {
+  background: transparent;
+  border-color: var(--color-line);
+  color: var(--color-ink);
+}
+.btn-secondary:hover {
+  background: var(--color-paper);
+  color: var(--color-ink);
+}
+
+/* Inline link-button used under the "enseignement" block. */
+.link-underline {
+  color: var(--color-green);
+  border-bottom: 1px solid var(--color-green);
+  padding-bottom: 2px;
+  transition:
+    color 120ms ease,
+    border-color 120ms ease;
+}
+.link-underline:hover {
+  color: var(--color-ochre);
+  border-color: var(--color-ochre);
+}
+
+/* Small caps label used on research cards and form fields. */
+.label {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* "À compléter" notes awaiting real content from the family. */
+.pending {
+  font-size: 13px;
+  color: var(--color-muted);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+/* Long-form text column. */
+.lede {
+  font-family: var(--font-serif);
+  font-weight: 300;
+  line-height: 1.55;
 }

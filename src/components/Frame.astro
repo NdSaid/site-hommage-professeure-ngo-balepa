@@ -1,0 +1,75 @@
+---
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+
+/**
+ * Emplacement photo. Remplace `image-slot.js` du prototype.
+ *
+ * Dépose un fichier nommé `<name>.jpg` (ou .png/.webp) dans
+ * src/assets/photos/ et il apparaît ici, redimensionné et optimisé.
+ * Tant qu'aucun fichier n'existe, un cadre vide est rendu — le site
+ * se construit donc avant l'arrivée des photographies.
+ */
+interface Props {
+  /** Nom du fichier attendu, sans extension. */
+  name: string;
+  /** Rapport d'aspect CSS, ex. "4/5". */
+  ratio: string;
+  alt?: string;
+  caption?: string;
+  sizes?: string;
+}
+
+const {
+  name,
+  ratio,
+  alt,
+  caption,
+  sizes = "(min-width: 768px) 50vw, 92vw",
+} = Astro.props;
+
+const files = import.meta.glob<{ default: ImageMetadata }>(
+  "../assets/photos/*.{jpg,jpeg,png,webp,avif}",
+  { eager: true },
+);
+
+const match = Object.entries(files).find(
+  ([path]) =>
+    path
+      .split("/")
+      .pop()!
+      .replace(/\.[^.]+$/, "") === name,
+);
+const image = match?.[1].default;
+---
+
+<figure class="m-0">
+  <div
+    class="overflow-hidden border border-line bg-paper"
+    style={`aspect-ratio: ${ratio};`}
+  >
+    {
+      image ? (
+        <Image
+          src={image}
+          alt={alt ?? caption ?? ""}
+          widths={[400, 800, 1200]}
+          sizes={sizes}
+          class="h-full w-full object-cover"
+        />
+      ) : (
+        <div
+          class="flex h-full w-full items-center justify-center p-4 text-center text-[12px] text-muted"
+          aria-hidden="true"
+        >
+          src/assets/photos/{name}.jpg
+        </div>
+      )
+    }
+  </div>
+  {
+    caption && (
+      <figcaption class="mt-2.5 text-[12px] text-muted">{caption}</figcaption>
+    )
+  }
+</figure>

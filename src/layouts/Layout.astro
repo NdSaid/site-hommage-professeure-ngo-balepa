@@ -9,11 +9,13 @@ interface Props {
   description?: string;
 }
 
-const { title, description = site.tagline } = Astro.props;
-const pageTitle = title ? `${title} — ${site.name}` : site.name;
+const { title, description = site.description } = Astro.props;
+const pageTitle = title
+  ? `${title} — ${site.shortName}`
+  : `${site.shortName} — Hommage`;
 ---
 
-<html lang="en">
+<html lang="fr">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -22,13 +24,15 @@ const pageTitle = title ? `${title} — ${site.name}` : site.name;
     <meta name="description" content={description} />
 
     <meta property="og:type" content="website" />
+    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:site_name" content={site.shortName} />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,300;0,400;0,500;1,300&family=Public+Sans:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
   </head>

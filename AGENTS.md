@@ -1,41 +1,80 @@
 # Working in this repository
 
-A memorial website for a university professor. Astro 7 (static output) with
-Tailwind CSS 4. No server, no database — everything compiles to static HTML.
+Site d'hommage à la Professeure Aurore Sara Ngo Balepa (Département de
+Géographie, Université de Douala). Astro 7, sortie statique, Tailwind CSS 4.
+Pas de serveur, pas de base de données.
 
-## Tone matters here
+Implémenté d'après un handoff de design **haute fidélité**
+(`Site hommage professeur géographie`). Couleurs, typographie, échelle
+d'espacement et états d'interaction y sont donnés comme définitifs.
 
-This is a memorial. Copy should be plain and dignified: no marketing voice, no
-exclamation marks, no growth-hacking patterns (popups, urgency banners,
-engagement prompts). When adding UI, prefer restraint over decoration.
+## Langue et ton
 
-## Where things live
+- **Le site est en français.** L'anglais n'apparaît qu'aux deux endroits prévus
+  par la maquette : la traduction du chapô sur l'accueil, et l'encart
+  « ENGLISH » de la biographie. Ne pas angliciser l'interface.
+- Ton académique et documentaire. C'est un mémorial : pas de voix marketing,
+  pas de point d'exclamation, aucun motif d'engagement (pop-ups, bannières
+  d'urgence, incitations).
 
-- `src/config.ts` — her name, dates, honorific, nav. Edit before anything else.
-- `src/data/career.ts` — education, appointments, honors (rendered as timelines).
-- `src/data/captions.json` — gallery captions, keyed by image filename.
-- `src/content/works/` — one Markdown file per publication. Schema in
+## Règles de design à ne pas enfreindre
+
+- **Aucun `border-radius`, aucune ombre portée.** Explicitement voulu par le
+  handoff : la hiérarchie passe par les filets 1px et les changements de fond.
+- Les accents vert et ocre partagent lightness et chroma (`oklch(0.42 0.055 H)`)
+  et ne diffèrent que par la teinte. Conserver ce rapport.
+- Responsive sans media query : `clamp()` pour la typographie et les marges,
+  `repeat(auto-fit, minmax(Xpx, 1fr))` pour les grilles.
+- Largeur maximale 1180px partout ; `.view` porte le padding de page.
+- Focus clavier : `outline: 2px solid` vert, `outline-offset: 3px`. Jamais
+  l'anneau bleu par défaut.
+
+## Où se trouvent les choses
+
+- `src/config.ts` — nom, affiliation, navigation, endpoint du livre d'or.
+- `src/data/carriere.ts` — chronologie (les « Année » sont des emplacements).
+- `src/data/captions.json` — légendes de galerie, indexées par nom de fichier.
+- `src/content/travaux/` — une fiche par publication. Schéma dans
   `src/content.config.ts`.
-- `src/content/tributes/` — one Markdown file per remembrance.
-- `src/assets/gallery/` — photographs; picked up by `import.meta.glob`.
-- `src/assets/portrait.jpg` — optional portrait, also globbed so its absence
-  does not break the build.
-- `src/styles/global.css` — the `@theme` block is the single source of truth
-  for color, type, and spacing. Restyle there, not in component classes.
+- `src/content/messages/` — livre d'or, **après modération** (voir plus bas).
+- `src/assets/photos/` — emplacements nommés (`portrait`, `enseignement`,
+  `biographie-1`, `biographie-2`, `cartes`), chargés par `Frame.astro`.
+- `src/assets/galerie/` — vignettes de la galerie.
+- `src/styles/global.css` — bloc `@theme` : source unique des jetons, plus les
+  classes du système (`.view`, `.eyebrow`, `.btn`, `.label`, `.pending`,
+  `.lede`). Restyler ici, pas dans les classes des composants.
 
 ## Conventions
 
-- Tailwind 4 is configured CSS-first: tokens live in the `@theme` block in
-  `global.css`, not in a `tailwind.config.js` (there isn't one).
-- Use the semantic token names (`text-ink`, `text-ink-soft`, `bg-parchment`,
-  `border-rule`, `text-accent`) rather than raw Tailwind palette colors, so a
-  future restyle stays contained to one file.
-- Optional images are loaded with `import.meta.glob`, never a direct `import`,
-  so the build succeeds before real photographs are added.
-- Empty collections render an explanatory placeholder rather than a blank page.
-  Keep that pattern when adding new content-driven sections.
+- Tailwind 4 configuré côté CSS : les jetons vivent dans `@theme` de
+  `global.css`, il n'y a pas de `tailwind.config.js`.
+- Utiliser les noms sémantiques (`text-ink`, `text-muted`, `bg-paper`,
+  `border-line`, `text-green`, `text-ochre`) plutôt que la palette Tailwind
+  brute, pour qu'un restylage reste contenu dans un seul fichier.
+- Les valeurs `clamp()` de la maquette sont reprises telles quelles en valeurs
+  arbitraires Tailwind ou en `style` inline quand c'est plus lisible.
+- Les images optionnelles passent par `import.meta.glob`, jamais par un
+  `import` direct : le site doit se construire avant l'arrivée des photos.
+- Les collections vides rendent une note `.pending` plutôt qu'une page blanche.
+  Garder ce motif.
+- `Frame.astro` remplace le `image-slot.js` du prototype. `support.js` du
+  handoff est le runtime du prototype et n'est pas porté.
 
-## Checks before committing
+## Livre d'or
+
+Le handoff impose une **modération avant publication**. Le formulaire poste
+vers un service externe (`site.guestbookEndpoint`) ; il n'écrit jamais dans
+`src/content/messages/`. Les messages relus y sont ajoutés à la main. Ne pas
+remplacer ce circuit par une publication automatique.
+
+## Contenus en attente
+
+Les blocs marqués `.pending` (« À compléter ») attendent des données réelles de
+la famille : dates de naissance et de décès, formation, distinctions,
+bibliographie exacte, années de carrière, photographies. Les laisser visibles
+tant qu'ils ne sont pas renseignés — ils servent de liste de tâches.
+
+## Vérifications avant de committer
 
 ```bash
 npm run build && npm run lint && npm run format:check
