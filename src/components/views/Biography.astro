@@ -17,14 +17,14 @@ const d = t(lang).biography;
     class="mt-12 grid items-start gap-[clamp(36px,5vw,72px)]"
     style="grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));"
   >
-    <div style="max-width: 62ch;">
+    <div class="reveal" style="max-width: 62ch;">
       <p class="lede text-[21px]">{d.lede}</p>
       {d.body.map((paragraph) => <p class="mt-6 text-muted">{paragraph}</p>)}
 
       <p class="pending mt-8">{d.pending}</p>
     </div>
 
-    <div class="grid gap-5">
+    <div class="reveal grid gap-5">
       <Frame name="biographie-1" ratio="3/4" caption={d.caption} />
       <Frame name="biographie-2" ratio="4/3" caption={d.caption} />
     </div>

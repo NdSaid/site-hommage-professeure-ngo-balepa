@@ -39,7 +39,7 @@ const other = otherLang(lang);
                 href={path(lang, key)}
                 aria-current={key === route ? "page" : undefined}
                 class:list={[
-                  "block px-3 py-[7px] text-[14px] no-underline transition-colors duration-[120ms] hover:bg-paper",
+                  "nav-link block px-3 py-[7px] text-[14px] no-underline transition-colors duration-[120ms] hover:bg-paper",
                   key === route ? "text-green" : "text-muted hover:text-muted",
                 ]}
               >
@@ -53,7 +53,7 @@ const other = otherLang(lang);
             href={path(other, route)}
             lang={other}
             aria-label={d.switcher.aria}
-            class="block px-3 py-[7px] text-[14px] text-muted no-underline transition-colors duration-[120ms] hover:bg-paper hover:text-muted"
+            class="nav-link block px-3 py-[7px] text-[14px] text-muted no-underline transition-colors duration-[120ms] hover:bg-paper hover:text-muted"
           >
             {d.switcher.label}
           </a>

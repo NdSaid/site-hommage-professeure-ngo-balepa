@@ -92,6 +92,33 @@ la famille : dates de naissance et de décès, formation, distinctions,
 bibliographie exacte, années de carrière, photographies. Les laisser visibles
 tant qu'ils ne sont pas renseignés — ils servent de liste de tâches.
 
+## Mouvement
+
+Le handoff ne prévoit **aucune** animation et n'autorise qu'une transition de
+couleur de 120 ms au survol. Ce qui a été ajouté reste dans cet esprit : durées
+longues (600–700 ms), amplitudes faibles (14 px), une seule courbe
+(`--ease-quiet`), aucun rebond, aucun déplacement au survol. Sur un site
+mémoriel, le mouvement ne doit jamais attirer l'attention sur lui-même.
+
+- Apparition au défilement : classe `.reveal`, plus `data-stagger` sur un
+  conteneur pour décaler ses enfants de 70 ms.
+- **Un contenu resté invisible est bien pire qu'une absence d'animation.** Le
+  masquage est donc conditionné à `html.js`, posé en ligne avant peinture : sans
+  JavaScript, rien n'est caché. Et l'armement a trois déclencheurs redondants
+  (DOM prêt, `astro:page-load`, et un filet de sécurité à 2 s) parce que
+  `astro:page-load` seul s'est révélé faillible en test.
+- `prefers-reduced-motion: reduce` neutralise tout, y compris les transitions
+  de vue. Les éléments restent visibles, ils cessent de bouger.
+- Toujours vérifier une modification du système d'apparition en conditions
+  réelles, pas seulement à la lecture du code.
+
+## Filets des grilles de fiches
+
+Les filets des fiches de travaux sont portés par `outline` sur `.card`, pas par
+le fond du conteneur vu à travers le `gap`. La technique d'origine laissait un
+aplat gris dès que la dernière rangée était incomplète (4 fiches sur 3
+colonnes). `outline` est hors flux et se recouvre proprement dans le gap de 1px.
+
 ## Liens internes et `base`
 
 Le site est servi depuis `https://ndsaid.github.io/<repo>/`, donc Astro tourne

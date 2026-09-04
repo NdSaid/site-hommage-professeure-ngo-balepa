@@ -18,6 +18,8 @@ interface Props {
   alt?: string;
   caption?: string;
   sizes?: string;
+  /** Classes portées par la <figure> — sert notamment à l'apparition. */
+  class?: string;
 }
 
 const {
@@ -26,6 +28,7 @@ const {
   alt,
   caption,
   sizes = "(min-width: 768px) 50vw, 92vw",
+  class: className,
 } = Astro.props;
 
 const files = import.meta.glob<{ default: ImageMetadata }>(
@@ -43,7 +46,7 @@ const match = Object.entries(files).find(
 const image = match?.[1].default;
 ---
 
-<figure class="m-0">
+<figure class:list={["m-0", className]}>
   <div
     class="overflow-hidden border border-line bg-paper"
     style={`aspect-ratio: ${ratio};`}
@@ -55,7 +58,7 @@ const image = match?.[1].default;
           alt={alt ?? caption ?? ""}
           widths={[400, 800, 1200]}
           sizes={sizes}
-          class="h-full w-full object-cover"
+          class="frame-img h-full w-full object-cover"
         />
       ) : (
         <div

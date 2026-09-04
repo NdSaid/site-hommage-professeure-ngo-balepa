@@ -36,10 +36,11 @@ const placeholders = Math.max(0, 6 - photos.length);
   <ul
     class="mt-12 grid list-none gap-5 p-0"
     style="grid-template-columns: repeat(auto-fit, minmax(min(210px, 100%), 1fr));"
+    data-stagger
   >
     {
       photos.map(({ filename, image, legende }) => (
-        <li>
+        <li class="reveal">
           <figure class="m-0">
             <button
               type="button"
@@ -100,15 +101,18 @@ const placeholders = Math.max(0, 6 - photos.length);
 </dialog>
 
 <script>
-  const dialog = document.getElementById(
-    "lightbox",
-  ) as HTMLDialogElement | null;
-  const img = document.getElementById(
-    "lightbox-img",
-  ) as HTMLImageElement | null;
-  const caption = document.getElementById("lightbox-caption");
+  // Ré-armé à chaque navigation : avec ClientRouter le script n'est pas
+  // ré-évalué au parse, seul `astro:page-load` est rejoué.
+  function armLightbox() {
+    const dialog = document.getElementById(
+      "lightbox",
+    ) as HTMLDialogElement | null;
+    const img = document.getElementById(
+      "lightbox-img",
+    ) as HTMLImageElement | null;
+    const caption = document.getElementById("lightbox-caption");
+    if (!dialog || !img || !caption) return;
 
-  if (dialog && img && caption) {
     document.querySelectorAll<HTMLElement>("[data-lightbox]").forEach((el) => {
       el.addEventListener("click", () => {
         img.src = el.dataset.lightbox ?? "";
@@ -126,4 +130,6 @@ const placeholders = Math.max(0, 6 - photos.length);
       if (event.target === dialog) dialog.close();
     });
   }
+
+  document.addEventListener("astro:page-load", armLightbox);
 </script>

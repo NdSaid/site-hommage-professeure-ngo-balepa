@@ -1,4 +1,5 @@
 ---
+import { ClientRouter } from "astro:transitions";
 import "../styles/global.css";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
@@ -71,6 +72,14 @@ const alternate = new URL(path(other, route), Astro.site ?? Astro.url);
     <meta property="og:description" content={pageDescription} />
     <meta property="og:url" content={canonical.href} />
 
+    {/* Posé avant peinture : sans JavaScript, aucun bloc n'est masqué. */}
+    <script is:inline>
+      document.documentElement.classList.add("js");
+    </script>
+
+    {/* Fondu enchaîné entre les pages plutôt qu'un flash blanc. */}
+    <ClientRouter />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -84,5 +93,96 @@ const alternate = new URL(path(other, route), Astro.site ?? Astro.url);
       <slot />
     </main>
     <Footer lang={lang} />
+
+    <script>
+      // Révèle les blocs à l'approche du viewport.
+      //
+      // Trois déclencheurs volontairement redondants. Un contenu resté
+      // invisible serait bien pire qu'une absence d'animation, et
+      // `astro:page-load` seul s'est révélé faillible : il peut ne jamais
+      // survenir si le routeur échoue à s'initialiser.
+      let armed = false;
+
+      function armReveals() {
+        const blocks = document.querySelectorAll<HTMLElement>(
+          ".reveal:not([data-revealed])",
+        );
+        armed = true;
+        if (!blocks.length) return;
+
+        const reduced = window.matchMedia(
+          "(prefers-reduced-motion: reduce)",
+        ).matches;
+
+        if (reduced || !("IntersectionObserver" in window)) {
+          blocks.forEach((el) => {
+            el.dataset.revealed = "";
+            el.classList.add("is-visible");
+          });
+          return;
+        }
+
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (!entry.isIntersecting) return;
+              const el = entry.target as HTMLElement;
+              // Décalage en cascade à l'intérieur d'un groupe.
+              const group = el.closest("[data-stagger]");
+              if (group) {
+                const peers = [...group.querySelectorAll(".reveal")];
+                el.style.transitionDelay = `${peers.indexOf(el) * 70}ms`;
+              }
+              el.classList.add("is-visible");
+              observer.unobserve(el);
+            });
+          },
+          { rootMargin: "0px 0px -8% 0px", threshold: 0.06 },
+        );
+
+        blocks.forEach((el) => {
+          el.dataset.revealed = "";
+          observer.observe(el);
+        });
+      }
+
+      // Fondu des photographies dès que le fichier est décodé.
+      function armImages() {
+        document
+          .querySelectorAll<HTMLImageElement>(".frame-img")
+          .forEach((img) => {
+            if (img.complete) img.classList.add("is-loaded");
+            else
+              img.addEventListener(
+                "load",
+                () => img.classList.add("is-loaded"),
+                { once: true },
+              );
+          });
+      }
+
+      function arm() {
+        armReveals();
+        armImages();
+      }
+
+      // 1. Premier rendu, sans dépendre du routeur.
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", arm, { once: true });
+      } else {
+        arm();
+      }
+
+      // 2. Navigations côté client.
+      document.addEventListener("astro:page-load", arm);
+
+      // 3. Filet de sécurité : si rien ne s'est armé, tout redevient visible.
+      window.setTimeout(() => {
+        if (armed) return;
+        document
+          .querySelectorAll<HTMLElement>(".reveal")
+          .forEach((el) => el.classList.add("is-visible"));
+      }, 2000);
+    </script>
   </body>
 </html>

@@ -41,7 +41,7 @@ const champs = [
     class="mt-12 grid items-start gap-[clamp(32px,5vw,64px)]"
     style="grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));"
   >
-    <div class="border border-line bg-paper p-7">
+    <div class="reveal border border-line bg-paper p-7">
       {
         site.guestbookEndpoint ? (
           <form
@@ -143,7 +143,7 @@ const champs = [
       }
     </div>
 
-    <div>
+    <div class="reveal">
       {
         rendered.length === 0 ? (
           <p class="pending">{d.empty}</p>
@@ -169,15 +169,16 @@ const champs = [
 <script>
   // Amélioration progressive : sans JavaScript, le formulaire se poste
   // normalement vers l'endpoint et l'utilisateur voit la page du service.
-  const form = document.getElementById(
-    "guestbook-form",
-  ) as HTMLFormElement | null;
-  const button = document.getElementById(
-    "guestbook-submit",
-  ) as HTMLButtonElement | null;
-  const status = document.getElementById("guestbook-status");
+  function armGuestbook() {
+    const form = document.getElementById(
+      "guestbook-form",
+    ) as HTMLFormElement | null;
+    const button = document.getElementById(
+      "guestbook-submit",
+    ) as HTMLButtonElement | null;
+    const status = document.getElementById("guestbook-status");
+    if (!form || !button || !status) return;
 
-  if (form && button && status) {
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
 
@@ -206,4 +207,6 @@ const champs = [
       }
     });
   }
+
+  document.addEventListener("astro:page-load", armGuestbook);
 </script>

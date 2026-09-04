@@ -164,3 +164,113 @@ a:hover {
   font-weight: 300;
   line-height: 1.55;
 }
+
+/* ---------------------------------------------------------------------------
+   Mouvement.
+
+   Le handoff ne prévoit aucune animation et n'autorise qu'une transition de
+   couleur de 120 ms au survol. Ce qui suit reste dans cet esprit : des durées
+   longues, des amplitudes faibles, aucun rebond. Sur un site mémoriel, le
+   mouvement doit se remarquer par son absence de brusquerie, pas par lui-même.
+   --------------------------------------------------------------------------- */
+
+/* Courbe unique : décélération douce, sans dépassement. */
+@theme {
+  --ease-quiet: cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+/* Apparition au défilement. `html.js` est posé avant le premier rendu : sans
+   JavaScript, rien n'est masqué et la page reste entièrement lisible. */
+html.js .reveal {
+  opacity: 0;
+  transform: translateY(14px);
+}
+
+html.js .reveal.is-visible {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 700ms var(--ease-quiet),
+    transform 700ms var(--ease-quiet);
+}
+
+/* Photographies : fondu à l'arrivée du fichier, pour éviter le « pop ». */
+.frame-img {
+  opacity: 0;
+  transition: opacity 600ms var(--ease-quiet);
+}
+.frame-img.is-loaded {
+  opacity: 1;
+}
+
+/* Fiches de travaux : le fond se réchauffe au survol. Pas d'ombre, pas de
+   déplacement — la maquette interdit l'un et l'autre. */
+.card {
+  /* Le filet est porté par la fiche, pas par le fond du conteneur : une
+     dernière rangée incomplète ne laisse donc aucun aplat derrière elle.
+     `outline` est hors flux et se recouvre proprement dans le gap de 1px. */
+  outline: 1px solid var(--color-line);
+  transition: background-color 260ms var(--ease-quiet);
+}
+.card:hover {
+  background-color: var(--color-paper);
+}
+
+/* Liens de navigation : filet qui se déploie depuis la gauche. */
+.nav-link {
+  position: relative;
+}
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 3px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 240ms var(--ease-quiet);
+}
+.nav-link:hover::after,
+.nav-link[aria-current="page"]::after {
+  transform: scaleX(1);
+}
+
+/* Entrées de chronologie et de galerie : la pastille et le cadre respirent. */
+.timeline-row {
+  transition: background-color 260ms var(--ease-quiet);
+}
+.timeline-row:hover {
+  background-color: color-mix(in srgb, var(--color-paper) 55%, transparent);
+}
+
+/* Respect strict de la préférence système. Tout mouvement est neutralisé :
+   les éléments restent visibles, ils cessent simplement de se déplacer. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  html.js .reveal,
+  html.js .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .frame-img {
+    opacity: 1;
+    transition: none;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}

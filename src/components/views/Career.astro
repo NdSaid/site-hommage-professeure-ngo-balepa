@@ -13,11 +13,11 @@ const d = t(lang).career;
 <div class="view">
   <PageHeader eyebrow={d.eyebrow} title={d.title} />
 
-  <ol class="mt-12 list-none p-0" style="max-width: 840px;">
+  <ol class="mt-12 list-none p-0" style="max-width: 840px;" data-stagger>
     {
       etapes.map((etape) => (
         <li
-          class="grid gap-[clamp(16px,3vw,36px)] border-t border-line py-[26px]"
+          class="timeline-row reveal grid gap-[clamp(16px,3vw,36px)] border-t border-line px-2 py-[26px]"
           style="grid-template-columns: minmax(78px, 140px) 1fr;"
         >
           <p class="m-0 font-serif text-[19px] text-ochre">

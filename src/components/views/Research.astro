@@ -40,11 +40,12 @@ const cards = await Promise.all(
       <p class="pending mt-12">{d.empty}</p>
     ) : (
       <div
-        class="mt-12 grid gap-px border border-line bg-line"
+        class="mt-12 grid gap-px"
         style="grid-template-columns: repeat(auto-fit, minmax(min(290px, 100%), 1fr));"
+        data-stagger
       >
         {cards.map(({ data, theme, reference, text, Content }) => (
-          <article class="bg-canvas p-[30px]">
+          <article class="card reveal bg-canvas p-[30px]">
             <p
               class:list={[
                 "label",
@@ -81,12 +82,12 @@ const cards = await Promise.all(
     class="mt-[clamp(48px,6vw,72px)] grid items-center gap-12"
     style="grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));"
   >
-    <div>
+    <div class="reveal">
       <h2 class="h2">{d.mapsTitle}</h2>
       <p class="mt-6 text-muted" style="max-width: 44ch;">{d.mapsText}</p>
       <p class="pending">{d.mapsPending}</p>
     </div>
 
-    <Frame name="cartes" ratio="16/10" caption={d.mapsCaption} />
+    <Frame class="reveal" name="cartes" ratio="16/10" caption={d.mapsCaption} />
   </section>
 </div>
