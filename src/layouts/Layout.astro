@@ -3,31 +3,73 @@ import "../styles/global.css";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import { site } from "../config";
+import {
+  languages,
+  otherLang,
+  path,
+  t,
+  type Lang,
+  type RouteKey,
+} from "../i18n";
 
 interface Props {
+  lang: Lang;
+  /** Vue courante — sert au lien actif et au sélecteur de langue. */
+  route: RouteKey;
   title?: string;
   description?: string;
 }
 
-const { title, description = site.description } = Astro.props;
+const { lang, route, title, description } = Astro.props;
+const d = t(lang);
+const other = otherLang(lang);
+
 const pageTitle = title
   ? `${title} — ${site.shortName}`
-  : `${site.shortName} — Hommage`;
+  : `${site.shortName} — ${d.meta.siteTitle}`;
+const pageDescription = description ?? d.meta.description;
+
+const canonical = new URL(path(lang, route), Astro.site ?? Astro.url);
+const alternate = new URL(path(other, route), Astro.site ?? Astro.url);
 ---
 
-<html lang="fr">
+<html lang={languages[lang].htmlLang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href={`${import.meta.env.BASE_URL}favicon.svg`.replace(/\/+/g, "/")}
+    />
     <title>{pageTitle}</title>
-    <meta name="description" content={description} />
+    <meta name="description" content={pageDescription} />
+
+    {site.draft && <meta name="robots" content="noindex, nofollow" />}
+
+    <link rel="canonical" href={canonical.href} />
+    <link
+      rel="alternate"
+      hreflang={languages[lang].htmlLang}
+      href={canonical.href}
+    />
+    <link
+      rel="alternate"
+      hreflang={languages[other].htmlLang}
+      href={alternate.href}
+    />
+    <link
+      rel="alternate"
+      hreflang="x-default"
+      href={new URL(path("fr", route), Astro.site ?? Astro.url).href}
+    />
 
     <meta property="og:type" content="website" />
-    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:locale" content={languages[lang].ogLocale} />
     <meta property="og:site_name" content={site.shortName} />
     <meta property="og:title" content={pageTitle} />
-    <meta property="og:description" content={description} />
+    <meta property="og:description" content={pageDescription} />
+    <meta property="og:url" content={canonical.href} />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -37,10 +79,10 @@ const pageTitle = title
     />
   </head>
   <body class="flex min-h-screen flex-col">
-    <Header />
+    <Header lang={lang} route={route} />
     <main class="flex-1">
       <slot />
     </main>
-    <Footer />
+    <Footer lang={lang} />
   </body>
 </html>

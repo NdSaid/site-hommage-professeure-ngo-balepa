@@ -1,0 +1,12 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Gallery from "../../components/views/Gallery.astro";
+import { t } from "../../i18n";
+
+const lang = "en" as const;
+const d = t(lang);
+---
+
+<Layout lang={lang} route="gallery" title={d.nav.gallery}>
+  <Gallery lang={lang} />
+</Layout>

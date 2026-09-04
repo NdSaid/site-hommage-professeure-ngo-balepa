@@ -1,0 +1,10 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Home from "../../components/views/Home.astro";
+
+const lang = "en" as const;
+---
+
+<Layout lang={lang} route="home">
+  <Home lang={lang} />
+</Layout>

@@ -1,38 +1,12 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import PageHeader from "../components/PageHeader.astro";
-import { etapes } from "../data/carriere";
+import Career from "../components/views/Career.astro";
+import { t } from "../i18n";
+
+const lang = "fr" as const;
+const d = t(lang);
 ---
 
-<Layout
-  title="Carrière"
-  description="Chronologie de la carrière universitaire de la Professeure Aurore Sara Ngo Balepa."
->
-  <div class="view">
-    <PageHeader eyebrow="Carrière · Career" title="Chronologie" />
-
-    <ol class="mt-12 list-none p-0" style="max-width: 840px;">
-      {
-        etapes.map((etape) => (
-          <li
-            class="grid gap-[clamp(16px,3vw,36px)] border-t border-line py-[26px]"
-            style="grid-template-columns: minmax(78px, 140px) 1fr;"
-          >
-            <p class="m-0 font-serif text-[19px] text-ochre">{etape.annee}</p>
-            <div>
-              <h2 class="font-serif text-[20px]">{etape.poste}</h2>
-              <p class="mt-1.5 mb-0 text-[15px] text-muted">
-                {etape.precision}
-              </p>
-            </div>
-          </li>
-        ))
-      }
-    </ol>
-
-    <p class="pending mt-8">
-      Dates et étapes supplémentaires à compléter (formation, responsabilités
-      scientifiques).
-    </p>
-  </div>
+<Layout lang={lang} route="career" title={d.nav.career}>
+  <Career lang={lang} />
 </Layout>

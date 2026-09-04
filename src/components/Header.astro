@@ -1,9 +1,21 @@
 ---
-import { site, nav } from "../config";
+import { site } from "../config";
+import {
+  otherLang,
+  path,
+  routeKeys,
+  t,
+  type Lang,
+  type RouteKey,
+} from "../i18n";
 
-const path = Astro.url.pathname;
-const isActive = (href: string) =>
-  href === "/" ? path === "/" : path.startsWith(href);
+interface Props {
+  lang: Lang;
+  route: RouteKey;
+}
+const { lang, route } = Astro.props;
+const d = t(lang);
+const other = otherLang(lang);
 ---
 
 <header
@@ -13,29 +25,39 @@ const isActive = (href: string) =>
   <div
     class="mx-auto flex max-w-[1180px] flex-wrap items-baseline gap-x-7 gap-y-3 px-[clamp(20px,4vw,40px)] py-4"
   >
-    <a href="/" class="mr-auto no-underline">
+    <a href={path(lang, "home")} class="mr-auto no-underline">
       <span class="block font-serif text-[19px] text-ink">{site.name}</span>
-      <span class="label mt-0.5 block text-muted">{site.affiliation}</span>
+      <span class="label mt-0.5 block text-muted">{d.header.affiliation}</span>
     </a>
 
-    <nav aria-label="Navigation principale">
+    <nav aria-label={d.header.navLabel}>
       <ul class="flex flex-wrap items-baseline">
         {
-          nav.map(({ href, label }) => (
+          routeKeys.map((key) => (
             <li>
               <a
-                href={href}
-                aria-current={isActive(href) ? "page" : undefined}
+                href={path(lang, key)}
+                aria-current={key === route ? "page" : undefined}
                 class:list={[
                   "block px-3 py-[7px] text-[14px] no-underline transition-colors duration-[120ms] hover:bg-paper",
-                  isActive(href) ? "text-green" : "text-muted hover:text-muted",
+                  key === route ? "text-green" : "text-muted hover:text-muted",
                 ]}
               >
-                {label}
+                {d.nav[key]}
               </a>
             </li>
           ))
         }
+        <li class="ml-2 border-l border-line pl-2">
+          <a
+            href={path(other, route)}
+            lang={other}
+            aria-label={d.switcher.aria}
+            class="block px-3 py-[7px] text-[14px] text-muted no-underline transition-colors duration-[120ms] hover:bg-paper hover:text-muted"
+          >
+            {d.switcher.label}
+          </a>
+        </li>
       </ul>
     </nav>
   </div>

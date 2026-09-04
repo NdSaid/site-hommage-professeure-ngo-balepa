@@ -1,97 +1,12 @@
 ---
-import { getCollection, render } from "astro:content";
 import Layout from "../layouts/Layout.astro";
-import PageHeader from "../components/PageHeader.astro";
-import Frame from "../components/Frame.astro";
+import Research from "../components/views/Research.astro";
+import { t } from "../i18n";
 
-const fiches = await getCollection("travaux");
-fiches.sort((a, b) => a.data.order - b.data.order);
-
-const rendered = await Promise.all(
-  fiches.map(async (fiche) => ({
-    ...fiche,
-    Content: (await render(fiche)).Content,
-  })),
-);
+const lang = "fr" as const;
+const d = t(lang);
 ---
 
-<Layout
-  title="Travaux"
-  description="Publications et recherches — géographie, industrialisation, développement."
->
-  <div class="view">
-    <PageHeader
-      eyebrow="Travaux · Research"
-      title="Publications et recherches"
-      titleWidth="14ch"
-    />
-
-    <p class="mt-6 text-muted" style="max-width: 54ch;">
-      Géographie, industrialisation, développement. Les références ci-dessous
-      sont des emplacements prêts à recevoir la bibliographie exacte.
-    </p>
-
-    <!-- Grille de fiches : les filets naissent du gap de 1px. -->
-    <div
-      class="mt-12 grid gap-px border border-line bg-line"
-      style="grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));"
-    >
-      {
-        rendered.map(({ data, Content }) => (
-          <article class="bg-canvas p-[30px]">
-            <p
-              class:list={[
-                "label",
-                data.accent === "ochre" ? "text-ochre" : "text-green",
-              ]}
-            >
-              {data.theme}
-            </p>
-            <h2 class="mt-3 font-serif text-[23px]">
-              {data.url || data.pdf ? (
-                <a
-                  href={data.url ?? data.pdf}
-                  class="no-underline hover:underline"
-                >
-                  {data.title}
-                </a>
-              ) : (
-                data.title
-              )}
-            </h2>
-            {data.reference && (
-              <p class="mt-3 mb-0 text-[15px] text-muted">{data.reference}</p>
-            )}
-            <div class="mt-2 text-[15px] text-muted [&_p:last-child]:mb-0">
-              <Content />
-            </div>
-          </article>
-        ))
-      }
-    </div>
-
-    <!-- Cartes et figures -->
-    <section
-      class="mt-[clamp(48px,6vw,72px)] grid items-center gap-12"
-      style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));"
-    >
-      <div>
-        <h2 class="h2">Cartes et figures</h2>
-        <p class="mt-6 text-muted" style="max-width: 44ch;">
-          Emplacement pour les cartes issues de ses recherches — zones
-          industrielles, dynamiques urbaines de Douala, découpages régionaux.
-        </p>
-        <p class="pending">
-          Envoyez les données et les graphiques seront produits.
-        </p>
-      </div>
-
-      <Frame
-        name="cartes"
-        ratio="16/10"
-        alt="Carte ou figure issue de ses recherches"
-        caption="Carte — légende à préciser"
-      />
-    </section>
-  </div>
+<Layout lang={lang} route="research" title={d.nav.research}>
+  <Research lang={lang} />
 </Layout>

@@ -1,0 +1,92 @@
+---
+import { getCollection, render } from "astro:content";
+import PageHeader from "../PageHeader.astro";
+import Frame from "../Frame.astro";
+import { t, type Lang } from "../../i18n";
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const d = t(lang).research;
+
+const fiches = await getCollection("travaux");
+fiches.sort((a, b) => a.data.order - b.data.order);
+
+const cards = await Promise.all(
+  fiches.map(async (fiche) => {
+    const { theme, themeEn, reference, referenceEn, summary, summaryEn } =
+      fiche.data;
+    const text = lang === "en" ? (summaryEn ?? summary) : summary;
+    return {
+      ...fiche,
+      // Le corps Markdown ne sert de repli que si aucun résumé n'est fourni.
+      Content: text ? null : (await render(fiche)).Content,
+      text,
+      theme: lang === "en" ? (themeEn ?? theme) : theme,
+      reference: lang === "en" ? (referenceEn ?? reference) : reference,
+    };
+  }),
+);
+---
+
+<div class="view">
+  <PageHeader eyebrow={d.eyebrow} title={d.title} titleWidth="14ch" />
+
+  <p class="mt-6 text-muted" style="max-width: 54ch;">{d.intro}</p>
+
+  {
+    cards.length === 0 ? (
+      <p class="pending mt-12">{d.empty}</p>
+    ) : (
+      <div
+        class="mt-12 grid gap-px border border-line bg-line"
+        style="grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));"
+      >
+        {cards.map(({ data, theme, reference, text, Content }) => (
+          <article class="bg-canvas p-[30px]">
+            <p
+              class:list={[
+                "label",
+                data.accent === "ochre" ? "text-ochre" : "text-green",
+              ]}
+            >
+              {theme}
+            </p>
+            <h2 class="mt-3 font-serif text-[23px]">
+              {data.url || data.pdf ? (
+                <a
+                  href={data.url ?? data.pdf}
+                  class="no-underline hover:underline"
+                >
+                  {data.title}
+                </a>
+              ) : (
+                data.title
+              )}
+            </h2>
+            {reference && (
+              <p class="mt-3 mb-0 text-[15px] text-muted">{reference}</p>
+            )}
+            <div class="mt-2 text-[15px] text-muted [&_p:last-child]:mb-0">
+              {text ? <p class="mb-0">{text}</p> : Content && <Content />}
+            </div>
+          </article>
+        ))}
+      </div>
+    )
+  }
+
+  <section
+    class="mt-[clamp(48px,6vw,72px)] grid items-center gap-12"
+    style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));"
+  >
+    <div>
+      <h2 class="h2">{d.mapsTitle}</h2>
+      <p class="mt-6 text-muted" style="max-width: 44ch;">{d.mapsText}</p>
+      <p class="pending">{d.mapsPending}</p>
+    </div>
+
+    <Frame name="cartes" ratio="16/10" caption={d.mapsCaption} />
+  </section>
+</div>

@@ -1,0 +1,12 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Career from "../../components/views/Career.astro";
+import { t } from "../../i18n";
+
+const lang = "en" as const;
+const d = t(lang);
+---
+
+<Layout lang={lang} route="career" title={d.nav.career}>
+  <Career lang={lang} />
+</Layout>

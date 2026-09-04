@@ -1,33 +1,23 @@
 /**
- * Détails du site. Source unique pour le nom, les titres et la navigation.
+ * Réglages du site. Les textes traduits vivent dans src/i18n/, pas ici.
  */
 export const site = {
   name: "Aurore Sara Ngo Balepa",
-  fullName: "Professeure Aurore Sara Ngo Balepa",
   shortName: "Pr. Aurore Sara Ngo Balepa",
-  affiliation: "Université de Douala · Géographie",
-  footerLine:
-    "Site d'hommage · Université de Douala, Département de Géographie",
-  description:
-    "Site d'hommage à la Professeure Aurore Sara Ngo Balepa, géographe, " +
-    "enseignante-chercheure au Département de Géographie de l'Université de Douala.",
+
+  /**
+   * Empêche l'indexation par les moteurs de recherche.
+   * Laisser à `true` tant que la page Travaux affiche
+   * « Titre de la publication » et la carrière « Année » : le nom de la
+   * Professeure ne doit pas être indexé attaché à un brouillon.
+   * Passer à `false` le jour de la mise en ligne réelle.
+   */
+  draft: true,
 
   /**
    * Endpoint de réception du livre d'or (Formspree, Netlify Forms, Web3Forms…).
-   * Laisser vide tant qu'aucun service n'est configuré : le formulaire
-   * affiche alors une adresse de contact à la place.
-   * Voir la section « Livre d'or » du README.
+   * Vide ⇒ le formulaire est remplacé par une invitation à écrire par courriel.
    */
   guestbookEndpoint: "",
-  /** Adresse de repli utilisée si guestbookEndpoint est vide. */
   contactEmail: "",
 } as const;
-
-export const nav = [
-  { href: "/", label: "Accueil" },
-  { href: "/biographie/", label: "Biographie" },
-  { href: "/travaux/", label: "Travaux" },
-  { href: "/carriere/", label: "Carrière" },
-  { href: "/galerie/", label: "Galerie" },
-  { href: "/livre-d-or/", label: "Livre d'or" },
-] as const;

@@ -1,77 +1,12 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import PageHeader from "../components/PageHeader.astro";
-import Frame from "../components/Frame.astro";
+import Biography from "../components/views/Biography.astro";
+import { t } from "../i18n";
+
+const lang = "fr" as const;
+const d = t(lang);
 ---
 
-<Layout
-  title="Biographie"
-  description="Une vie de géographe — parcours de la Professeure Aurore Sara Ngo Balepa au Département de Géographie de l'Université de Douala."
->
-  <div class="view">
-    <PageHeader
-      eyebrow="Biographie · Biography"
-      title="Une vie de géographe"
-      titleWidth="16ch"
-    />
-
-    <div
-      class="mt-12 grid items-start gap-[clamp(36px,5vw,72px)]"
-      style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));"
-    >
-      <div style="max-width: 62ch;">
-        <p class="lede text-[21px]">
-          La Professeure Aurore Sara Ngo Balepa a exercé comme
-          enseignante-chercheure au Département de Géographie de l'Université de
-          Douala.
-        </p>
-        <p class="mt-6 text-muted">
-          Elle y a occupé le poste de cheffe de département de géographie, avant
-          d'être Vice-Doyenne à la Faculté des Lettres et Sciences Humaines
-          (FLSH) de l'Université de Douala.
-        </p>
-        <p class="text-muted">
-          Ses travaux de recherche portaient notamment sur la géographie,
-          l'industrialisation et le développement.
-        </p>
-
-        <!-- Encart anglais -->
-        <div class="mt-10 border-l-2 border-green bg-paper px-7 py-[26px]">
-          <h2
-            class="font-sans text-[15px] font-semibold uppercase"
-            style="letter-spacing: 0.1em;"
-          >
-            English
-          </h2>
-          <p class="mt-3 mb-0 text-[15px] text-muted">
-            Professor Aurore Sara Ngo Balepa taught and researched at the
-            Department of Geography of the University of Douala, where she
-            served as Head of Department and later as Vice-Dean of the Faculty
-            of Arts and Humanities. Her research addressed geography,
-            industrialisation and development.
-          </p>
-        </div>
-
-        <p class="pending mt-8">
-          À compléter : dates de naissance et de décès, formation, distinctions,
-          texte familial.
-        </p>
-      </div>
-
-      <div class="grid gap-5">
-        <Frame
-          name="biographie-1"
-          ratio="3/4"
-          alt="Portrait"
-          caption="Légende à préciser"
-        />
-        <Frame
-          name="biographie-2"
-          ratio="4/3"
-          alt="Photographie"
-          caption="Légende à préciser"
-        />
-      </div>
-    </div>
-  </div>
+<Layout lang={lang} route="biography" title={d.nav.biography}>
+  <Biography lang={lang} />
 </Layout>

@@ -5,7 +5,9 @@ Site mémoriel bilingue (français principal, anglais secondaire) rendant hommag
 de Géographie de l'Université de Douala, cheffe de département puis Vice-Doyenne
 de la Faculté des Lettres et Sciences Humaines (FLSH).
 
-Six vues : Accueil, Biographie, Travaux, Carrière, Galerie, Livre d'or.
+Six vues : Accueil, Biographie, Travaux, Carrière, Galerie, Livre d'or —
+en français (`/travaux/`) et en anglais (`/en/research/`), avec un sélecteur
+de langue dans l'en-tête.
 
 Réalisé avec [Astro](https://astro.build) et Tailwind CSS, d'après le handoff
 de design `Site hommage professeur géographie`. Le site est entièrement
@@ -112,7 +114,49 @@ pas modifier sans raison :
 - Le responsive repose sur `clamp()` et `repeat(auto-fit, minmax(…))`, sans
   media query.
 
+## Traduire
+
+Tous les textes d'interface sont dans `src/i18n/fr.ts` et `src/i18n/en.ts`.
+Les deux fichiers sont tenus par l'interface `Dictionary` (`src/i18n/types.ts`) :
+ajouter une clé d'un seul côté fait échouer la compilation, ce qui empêche les
+deux versions de diverger sans qu'on s'en aperçoive.
+
+Deux blocs n'existent qu'en français, parce qu'ils traduisent vers l'anglais :
+la ligne sous le chapô de l'accueil et l'encart « ENGLISH » de la biographie.
+
+Pour les travaux, le titre d'une publication ne se traduit pas. Ajouter
+seulement `themeEn`, `referenceEn` et `summaryEn` au besoin :
+
+```markdown
+---
+theme: "Industrialisation"
+themeEn: "Industrialisation"
+title: "Titre exact, tel que publié"
+summary: "Résumé français."
+summaryEn: "English summary."
+---
+```
+
 ## Mettre en ligne
 
-`npm run build` produit un dossier `dist/` de fichiers statiques. Netlify,
-Vercel, Cloudflare Pages et GitHub Pages l'hébergent gratuitement.
+Le site est déployé sur **GitHub Pages** à chaque push sur `main`, par
+`.github/workflows/deploy.yml` (lint, format, build, puis publication).
+
+**https://ndsaid.github.io/site-hommage-professeure-ngo-balepa/**
+
+Comme GitHub Pages sert le site depuis un sous-chemin, `astro.config.mjs`
+définit `base`. Conséquence pratique : **tout lien interne doit passer par
+`path(lang, route)`** de `src/i18n` — un `href="/travaux/"` écrit en dur
+fonctionne en développement et casse en production.
+
+Avec un nom de domaine propre, remettre `base: "/"` et ajuster `site`.
+
+### Avant la mise en ligne réelle
+
+Le site est actuellement **bloqué à l'indexation**, pour que le nom de la
+Professeure ne remonte pas dans les moteurs de recherche attaché à un
+brouillon. Le jour où le contenu est complet :
+
+1. `draft: false` dans `src/config.ts`
+2. vider `public/robots.txt`
+3. supprimer `src/content/messages/exemple.md`

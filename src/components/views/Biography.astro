@@ -1,0 +1,46 @@
+---
+import PageHeader from "../PageHeader.astro";
+import Frame from "../Frame.astro";
+import { t, type Lang } from "../../i18n";
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const d = t(lang).biography;
+---
+
+<div class="view">
+  <PageHeader eyebrow={d.eyebrow} title={d.title} titleWidth="16ch" />
+
+  <div
+    class="mt-12 grid items-start gap-[clamp(36px,5vw,72px)]"
+    style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));"
+  >
+    <div style="max-width: 62ch;">
+      <p class="lede text-[21px]">{d.lede}</p>
+      {d.body.map((paragraph) => <p class="mt-6 text-muted">{paragraph}</p>)}
+
+      {
+        d.inset && (
+          <div class="mt-10 border-l-2 border-green bg-paper px-7 py-[26px]">
+            <h2
+              class="font-sans text-[15px] font-semibold uppercase"
+              style="letter-spacing: 0.1em;"
+            >
+              {d.inset.heading}
+            </h2>
+            <p class="mt-3 mb-0 text-[15px] text-muted">{d.inset.text}</p>
+          </div>
+        )
+      }
+
+      <p class="pending mt-8">{d.pending}</p>
+    </div>
+
+    <div class="grid gap-5">
+      <Frame name="biographie-1" ratio="3/4" caption={d.caption} />
+      <Frame name="biographie-2" ratio="4/3" caption={d.caption} />
+    </div>
+  </div>
+</div>

@@ -10,9 +10,21 @@ d'espacement et états d'interaction y sont donnés comme définitifs.
 
 ## Langue et ton
 
-- **Le site est en français.** L'anglais n'apparaît qu'aux deux endroits prévus
-  par la maquette : la traduction du chapô sur l'accueil, et l'encart
-  « ENGLISH » de la biographie. Ne pas angliciser l'interface.
+- **Le site est bilingue.** Le français est la langue par défaut et n'est pas
+  préfixé (`/travaux/`) ; l'anglais vit sous `/en/` avec des slugs traduits
+  (`/en/research/`). Les slugs sont déclarés dans `routes` (`src/i18n/index.ts`).
+- Tous les textes d'interface passent par `src/i18n/fr.ts` et `src/i18n/en.ts`,
+  tenus par l'interface `Dictionary` (`src/i18n/types.ts`) : ajouter une clé
+  d'un seul côté casse la compilation. C'est voulu.
+- Deux blocs de la maquette n'existent **que** sur la version française, parce
+  qu'ils traduisent vers l'anglais : la ligne sous le chapô de l'accueil
+  (`home.ledeAlt`) et l'encart « ENGLISH » de la biographie (`biography.inset`).
+  Ils sont optionnels dans `Dictionary` et absents de `en.ts`. Ne pas les
+  rétablir côté anglais.
+- Les titres de publications ne se traduisent pas : ils restent tels qu'ils ont
+  été publiés. Seuls `themeEn`, `referenceEn` et `summaryEn` existent.
+- Les hommages du livre d'or restent dans la langue de leur auteur et
+  s'affichent tels quels dans les deux versions.
 - Ton académique et documentaire. C'est un mémorial : pas de voix marketing,
   pas de point d'exclamation, aucun motif d'engagement (pop-ups, bannières
   d'urgence, incitations).
@@ -31,7 +43,11 @@ d'espacement et états d'interaction y sont donnés comme définitifs.
 
 ## Où se trouvent les choses
 
-- `src/config.ts` — nom, affiliation, navigation, endpoint du livre d'or.
+- `src/config.ts` — nom, drapeau `draft`, endpoint du livre d'or.
+- `src/i18n/` — `index.ts` (langues, routes, helper `path()`), `types.ts`
+  (interface partagée), `fr.ts`, `en.ts`.
+- `src/components/views/` — une vue par écran, paramétrée par `lang`. Les
+  fichiers de `src/pages/` ne sont que des enveloppes : 6 vues × 2 langues.
 - `src/data/carriere.ts` — chronologie (les « Année » sont des emplacements).
 - `src/data/captions.json` — légendes de galerie, indexées par nom de fichier.
 - `src/content/travaux/` — une fiche par publication. Schéma dans
@@ -73,6 +89,26 @@ Les blocs marqués `.pending` (« À compléter ») attendent des données réel
 la famille : dates de naissance et de décès, formation, distinctions,
 bibliographie exacte, années de carrière, photographies. Les laisser visibles
 tant qu'ils ne sont pas renseignés — ils servent de liste de tâches.
+
+## Liens internes et `base`
+
+Le site est servi depuis `https://ndsaid.github.io/<repo>/`, donc Astro tourne
+avec un `base`. **Astro n'applique pas `base` aux `href` écrits à la main.**
+Tout lien interne doit passer par `path(lang, route)` de `src/i18n`, et tout
+fichier de `public/` par `asset()`. Un `href="/travaux/"` écrit en dur
+fonctionne en développement et casse en production — c'est le piège principal
+de ce dépôt.
+
+Si un nom de domaine propre est branché plus tard : `base: "/"` et `site` à
+jour dans `astro.config.mjs`, et rien d'autre ne bouge.
+
+## Indexation
+
+`site.draft` (dans `src/config.ts`) pose `noindex, nofollow` sur toutes les
+pages, et `public/robots.txt` bloque l'exploration. Les deux sont là parce que
+le nom de la Professeure ne doit pas être indexé tant que la page Travaux
+affiche « Titre de la publication ». Le jour de la mise en ligne réelle :
+passer `draft` à `false` **et** vider `robots.txt`.
 
 ## Vérifications avant de committer
 

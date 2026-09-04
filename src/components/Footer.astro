@@ -1,5 +1,12 @@
 ---
 import { site } from "../config";
+import { t, type Lang } from "../i18n";
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const d = t(lang);
 ---
 
 <footer class="mt-auto border-t border-line bg-paper">
@@ -7,6 +14,6 @@ import { site } from "../config";
     class="mx-auto flex max-w-[1180px] flex-wrap items-baseline justify-between gap-4 px-[clamp(20px,4vw,40px)] py-9"
   >
     <p class="font-serif text-[18px] text-ink">{site.shortName}</p>
-    <p class="text-[13px] text-muted">{site.footerLine}</p>
+    <p class="text-[13px] text-muted">{d.footer.line}</p>
   </div>
 </footer>

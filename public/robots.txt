@@ -1,0 +1,6 @@
+# Le site est en cours de constitution : contenus encore à l'état
+# d'emplacements (bibliographie, dates, photographies).
+# Retirer ce blocage — et passer `draft: false` dans src/config.ts —
+# le jour de la mise en ligne réelle.
+User-agent: *
+Disallow: /

@@ -1,29 +1,36 @@
 /**
- * Chronologie de carrière. Renseigner `annee` au fur et à mesure que les
- * dates sont confirmées par la famille ; « Année » reste affiché tant que
- * la valeur n'est pas remplacée.
+ * Chronologie de carrière, bilingue.
+ * `annee` reste « Année » / "Year" tant que la date n'est pas confirmée.
  */
 export interface Etape {
-  annee: string;
-  poste: string;
-  precision: string;
+  annee: { fr: string; en: string };
+  poste: { fr: string; en: string };
+  precision: { fr: string; en: string };
 }
 
 export const etapes: Etape[] = [
   {
-    annee: "Année",
-    poste: "Enseignante-chercheure",
-    precision: "Département de Géographie, Université de Douala.",
+    annee: { fr: "Année", en: "Year" },
+    poste: { fr: "Enseignante-chercheure", en: "Lecturer and researcher" },
+    precision: {
+      fr: "Département de Géographie, Université de Douala.",
+      en: "Department of Geography, University of Douala.",
+    },
   },
   {
-    annee: "Année",
-    poste: "Cheffe de département",
-    precision: "Département de Géographie, Université de Douala.",
+    annee: { fr: "Année", en: "Year" },
+    poste: { fr: "Cheffe de département", en: "Head of Department" },
+    precision: {
+      fr: "Département de Géographie, Université de Douala.",
+      en: "Department of Geography, University of Douala.",
+    },
   },
   {
-    annee: "Année",
-    poste: "Vice-Doyenne",
-    precision:
-      "Faculté des Lettres et Sciences Humaines (FLSH), Université de Douala.",
+    annee: { fr: "Année", en: "Year" },
+    poste: { fr: "Vice-Doyenne", en: "Vice-Dean" },
+    precision: {
+      fr: "Faculté des Lettres et Sciences Humaines (FLSH), Université de Douala.",
+      en: "Faculty of Arts and Humanities (FLSH), University of Douala.",
+    },
   },
 ];

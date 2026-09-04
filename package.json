@@ -24,6 +24,7 @@
     "esbuild": true
   },
   "devDependencies": {
+    "@astrojs/sitemap": "^3.7.4",
     "@eslint/js": "^10.0.1",
     "astro-eslint-parser": "^1.4.0",
     "eslint": "^10.9.1",

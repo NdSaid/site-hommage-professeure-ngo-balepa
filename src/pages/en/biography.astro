@@ -1,0 +1,12 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Biography from "../../components/views/Biography.astro";
+import { t } from "../../i18n";
+
+const lang = "en" as const;
+const d = t(lang);
+---
+
+<Layout lang={lang} route="biography" title={d.nav.biography}>
+  <Biography lang={lang} />
+</Layout>

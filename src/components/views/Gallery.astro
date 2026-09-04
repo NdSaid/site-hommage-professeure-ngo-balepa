@@ -1,0 +1,129 @@
+---
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+import PageHeader from "../PageHeader.astro";
+import captions from "../../data/captions.json";
+import { t, type Lang } from "../../i18n";
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const d = t(lang).gallery;
+
+const files = import.meta.glob<{ default: ImageMetadata }>(
+  "../../assets/galerie/*.{jpg,jpeg,png,webp,avif}",
+  { eager: true },
+);
+
+const legendes = captions as Record<string, string>;
+
+const photos = Object.entries(files)
+  .map(([file, mod]) => {
+    const filename = file.split("/").pop()!;
+    return { filename, image: mod.default, legende: legendes[filename] };
+  })
+  .sort((a, b) => a.filename.localeCompare(b.filename));
+
+// La maquette montre six cadres ; on complète la grille tant que les
+// photographies réelles n'ont pas été fournies.
+const placeholders = Math.max(0, 6 - photos.length);
+---
+
+<div class="view">
+  <PageHeader eyebrow={d.eyebrow} title={d.title} />
+
+  <ul
+    class="mt-12 grid list-none gap-5 p-0"
+    style="grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));"
+  >
+    {
+      photos.map(({ filename, image, legende }) => (
+        <li>
+          <figure class="m-0">
+            <button
+              type="button"
+              class="block w-full cursor-zoom-in border border-line bg-paper p-0"
+              style="aspect-ratio: 3/4;"
+              data-lightbox={image.src}
+              data-caption={legende ?? ""}
+              aria-label={`${d.zoom} : ${legende ?? filename}`}
+            >
+              <Image
+                src={image}
+                alt={legende ?? filename}
+                widths={[300, 600]}
+                sizes="(min-width: 1024px) 25vw, (min-width: 640px) 45vw, 90vw"
+                class="h-full w-full object-cover"
+              />
+            </button>
+            {legende && (
+              <figcaption class="mt-2.5 text-[12px] text-muted">
+                {legende}
+              </figcaption>
+            )}
+          </figure>
+        </li>
+      ))
+    }
+    {
+      Array.from({ length: placeholders }).map(() => (
+        <li>
+          <div
+            class="flex items-center justify-center border border-line bg-paper p-4 text-center text-[12px] text-muted"
+            style="aspect-ratio: 3/4;"
+            aria-hidden="true"
+          >
+            src/assets/galerie/
+          </div>
+        </li>
+      ))
+    }
+  </ul>
+
+  {photos.length === 0 && <p class="pending mt-8">{d.pending}</p>}
+</div>
+
+<dialog
+  id="lightbox"
+  class="m-auto max-h-[92vh] max-w-[92vw] border border-line bg-canvas p-0 backdrop:bg-ink/70"
+>
+  <button
+    type="button"
+    id="lightbox-close"
+    class="btn btn-secondary absolute top-3 right-3 z-10 px-3 py-1 text-[13px]"
+  >
+    {d.close}
+  </button>
+  <img id="lightbox-img" src="" alt="" class="max-h-[80vh] w-auto" />
+  <p id="lightbox-caption" class="m-0 px-4 py-3 text-[13px] text-muted"></p>
+</dialog>
+
+<script>
+  const dialog = document.getElementById(
+    "lightbox",
+  ) as HTMLDialogElement | null;
+  const img = document.getElementById(
+    "lightbox-img",
+  ) as HTMLImageElement | null;
+  const caption = document.getElementById("lightbox-caption");
+
+  if (dialog && img && caption) {
+    document.querySelectorAll<HTMLElement>("[data-lightbox]").forEach((el) => {
+      el.addEventListener("click", () => {
+        img.src = el.dataset.lightbox ?? "";
+        img.alt = el.dataset.caption ?? "";
+        caption.textContent = el.dataset.caption ?? "";
+        dialog.showModal();
+      });
+    });
+
+    document
+      .getElementById("lightbox-close")
+      ?.addEventListener("click", () => dialog.close());
+
+    dialog.addEventListener("click", (event) => {
+      if (event.target === dialog) dialog.close();
+    });
+  }
+</script>
