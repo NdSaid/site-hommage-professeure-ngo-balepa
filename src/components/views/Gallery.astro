@@ -35,7 +35,7 @@ const placeholders = Math.max(0, 6 - photos.length);
 
   <ul
     class="mt-12 grid list-none gap-5 p-0"
-    style="grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));"
+    style="grid-template-columns: repeat(auto-fit, minmax(min(210px, 100%), 1fr));"
   >
     {
       photos.map(({ filename, image, legende }) => (
