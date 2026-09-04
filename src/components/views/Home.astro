@@ -23,13 +23,6 @@ const d = t(lang).home;
     <p class="lede text-[clamp(17px,1.8vw,20px)]" style="max-width: 48ch;">
       {d.lede}
     </p>
-    {
-      d.ledeAlt && (
-        <p class="mt-3 text-[15px] text-muted italic" style="max-width: 48ch;">
-          {d.ledeAlt}
-        </p>
-      )
-    }
 
     <div class="mt-[34px] flex flex-wrap gap-2.5">
       <a href={path(lang, "biography")} class="btn btn-primary no-underline">

@@ -34,10 +34,6 @@ export const fr: Dictionary = {
       "Géographe, enseignante-chercheure au Département de Géographie de " +
       "l'Université de Douala. Cheffe de département, puis Vice-Doyenne de la " +
       "Faculté des Lettres et Sciences Humaines.",
-    /** Traduction affichée sous le chapô, uniquement sur la version française. */
-    ledeAlt:
-      "Geographer and researcher at the University of Douala. Head of the " +
-      "Geography Department, later Vice-Dean of the Faculty of Arts and Humanities.",
     ctaPrimary: "Découvrir son parcours",
     ctaSecondary: "Laisser un message",
     portraitCaption: "Portrait — légende et date à préciser",
@@ -76,15 +72,6 @@ export const fr: Dictionary = {
       "Ses travaux de recherche portaient notamment sur la géographie, " +
         "l'industrialisation et le développement.",
     ],
-    /** Encart de la maquette — n'apparaît que sur la version française. */
-    inset: {
-      heading: "English",
-      text:
-        "Professor Aurore Sara Ngo Balepa taught and researched at the Department " +
-        "of Geography of the University of Douala, where she served as Head of " +
-        "Department and later as Vice-Dean of the Faculty of Arts and Humanities. " +
-        "Her research addressed geography, industrialisation and development.",
-    },
     pending:
       "À compléter : dates de naissance et de décès, formation, distinctions, texte familial.",
     caption: "Légende à préciser",

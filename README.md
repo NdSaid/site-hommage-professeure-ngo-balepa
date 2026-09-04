@@ -121,8 +121,10 @@ Les deux fichiers sont tenus par l'interface `Dictionary` (`src/i18n/types.ts`) 
 ajouter une clé d'un seul côté fait échouer la compilation, ce qui empêche les
 deux versions de diverger sans qu'on s'en aperçoive.
 
-Deux blocs n'existent qu'en français, parce qu'ils traduisent vers l'anglais :
-la ligne sous le chapô de l'accueil et l'encart « ENGLISH » de la biographie.
+La maquette prévoyait deux blocs anglais à l'intérieur des pages françaises
+(sous le chapô de l'accueil, et un encart « ENGLISH » en biographie). Ils ont
+été retirés : la version anglaise complète les rend redondants, et le
+sélecteur de langue de l'en-tête remplit désormais ce rôle.
 
 Pour les travaux, le titre d'une publication ne se traduit pas. Ajouter
 seulement `themeEn`, `referenceEn` et `summaryEn` au besoin :

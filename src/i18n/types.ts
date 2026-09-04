@@ -20,8 +20,6 @@ export interface Dictionary {
     eyebrow: string;
     title: string;
     lede: string;
-    /** Traduction sous le chapô. Français uniquement — absente en anglais. */
-    ledeAlt?: string;
     ctaPrimary: string;
     ctaSecondary: string;
     portraitCaption: string;
@@ -36,8 +34,6 @@ export interface Dictionary {
     title: string;
     lede: string;
     body: string[];
-    /** Encart de la maquette. Français uniquement — redondant en anglais. */
-    inset?: { heading: string; text: string };
     pending: string;
     caption: string;
   };

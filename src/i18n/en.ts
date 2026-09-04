@@ -33,7 +33,6 @@ export const en: Dictionary = {
       "Geographer and researcher at the Department of Geography, University of " +
       "Douala. Head of the Geography Department, later Vice-Dean of the Faculty " +
       "of Arts and Humanities.",
-    // Pas de ledeAlt : sur la version anglaise, le chapô EST l'anglais.
     ctaPrimary: "Explore her career",
     ctaSecondary: "Leave a message",
     portraitCaption: "Portrait — caption and date to be confirmed",
@@ -70,7 +69,6 @@ export const en: Dictionary = {
         "University of Douala.",
       "Her research addressed geography, industrialisation and development.",
     ],
-    // Pas d'encart : la maquette le prévoit pour traduire vers l'anglais.
     pending:
       "To be completed: dates of birth and death, education, distinctions, and a family text.",
     caption: "Caption to be confirmed",

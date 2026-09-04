@@ -16,11 +16,13 @@ d'espacement et états d'interaction y sont donnés comme définitifs.
 - Tous les textes d'interface passent par `src/i18n/fr.ts` et `src/i18n/en.ts`,
   tenus par l'interface `Dictionary` (`src/i18n/types.ts`) : ajouter une clé
   d'un seul côté casse la compilation. C'est voulu.
-- Deux blocs de la maquette n'existent **que** sur la version française, parce
-  qu'ils traduisent vers l'anglais : la ligne sous le chapô de l'accueil
-  (`home.ledeAlt`) et l'encart « ENGLISH » de la biographie (`biography.inset`).
-  Ils sont optionnels dans `Dictionary` et absents de `en.ts`. Ne pas les
-  rétablir côté anglais.
+- **Deux blocs de la maquette ont été retirés, volontairement.** Le prototype
+  plaçait une traduction anglaise sous le chapô de l'accueil et un encart
+  « ENGLISH » dans la biographie : ils dépannaient un lecteur anglophone
+  bloqué sur une page française. Le site ayant désormais une version anglaise
+  complète, ces blocs faisaient doublon et donnaient deux traductions à tenir
+  à jour au lieu d'une. Ne pas les réintroduire depuis la maquette — le
+  basculement de langue s'opère par l'en-tête.
 - Les titres de publications ne se traduisent pas : ils restent tels qu'ils ont
   été publiés. Seuls `themeEn`, `referenceEn` et `summaryEn` existent.
 - Les hommages du livre d'or restent dans la langue de leur auteur et
